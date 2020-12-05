@@ -4,6 +4,7 @@ const config = require('config');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const {User, validate} = require('../models/user');
+const {Movie} = require('../models/movie'); 
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
@@ -28,7 +29,7 @@ router.post('/register', async (req, res) => {
   await user.save();
 
   const token = user.generateAuthToken();
-  res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
+  res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email','isAdmin']));
 });
 
 
@@ -39,6 +40,24 @@ router.get("/GetUserMovies",[auth],async (req,res) =>{
 res.send(userMovies);
   });
 
-
+  router.get("/GetUserRate/:movieId",[auth],async (req,res) =>{ 
+    if(!req.params.movieId) res.status(400).send('Invalid movie.');
+    var userId = req.user._id;
+    const movie = await Movie
+    .findOne({'_id':req.params.movieId.trim(),'rates':{$elemMatch:{user: userId}}})
+    .select({'rates':1});
+   let rate = 0;
+   if( movie != null )
+   movie.rates.forEach(element => {
+  
+    if (element.user == userId)
+    {
+     rate = element.value ;
+     console.log(element);
+     return;
+    }
+    });
+  res.send(rate.toString());
+    });
 
 module.exports = router; 
