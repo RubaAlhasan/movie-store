@@ -3,6 +3,25 @@ const admin = require('../middleware/admin');
 const {Actor, validate} = require('../models/actor');
 const mongoose = require('mongoose');
 const express = require('express');
+
+var multer  = require('multer')
+
+const storage = multer.diskStorage({
+  destination: './uploads/movieimages/',
+  filename(req, file, cb) {
+    var currentdate = new Date(); 
+    var datetime =currentdate.getFullYear().toString()  +  (parseInt(currentdate.getMonth())    + 1).toString() 
+       +   currentdate.getDate().toString() + 
+      + currentdate.getHours().toString()  
+      + currentdate.getMinutes().toString()  +  currentdate.getSeconds().toString() ; 
+    cb(null, `${datetime}-${file.originalname}`);
+   }
+  
+});
+
+const upload = multer({ storage });
+
+
 const router = express.Router();
 router.use(
   express.urlencoded({
@@ -25,11 +44,13 @@ router.get('/get/:startWithfilter', async (req, res) => {
 });
 
 
-router.post('/add', [auth, admin], async (req, res) => {
+router.post('/add', [auth, admin],upload.single('file'), async (req, res) => {
   const { error } = validate(req.body); 
   if (error) return res.status(400).send(error.details[0].message);
-
-  let actor = new Actor({ name: req.body.name });
+  let path="";
+  if (req.file) 
+   path = req.file.path;
+  let actor = new Actor({ name: req.body.name,Image:path });
   actor = await actor.save();
   
   res.send(actor);

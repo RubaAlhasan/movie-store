@@ -145,11 +145,10 @@ router.post('/add',[auth,admin], async (req, res) => {
     },
     actors: actors,
     price:req.body.price,
-    image:"",
-    description:req.body.description
+    description:req.body.description,
+    Image:""
   });
   await movie.save();
-  
   res.send(movie);
 });
 
@@ -204,16 +203,11 @@ router.get('/:id', async (req, res) => {
 });
 
 //multipart/form-data
-router.post('/uploadImage/:movieId',[auth,admin] ,upload.single('file'),async (req, res) => {
-  console.log(req.file);
+router.post('/uploadFile/:movieId',[auth,admin] ,upload.single('file'),async (req, res) => {
+
   if (!req.file) return res.status(404).send('No file uploaded.');
 
-          //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
-          let img = req.file;
-
-          //Use the mv() method to place the file in upload directory (i.e. "uploads")
-       //  var path='./uploads/MovieImages/' + req.params.movieId;      
-        //  img.mv(path);
+         let img = req.file;
           const movie = await Movie.findByIdAndUpdate(req.params.movieId,
             { 
               Image:img.path

@@ -21,11 +21,13 @@ router.get('/get/:startWithfilter', async (req, res) => {
   .sort('name');
   res.send(Directors);
 });
-router.post('/add', [auth, admin], async (req, res) => {
+router.post('/add', [auth, admin],upload.single('file'), async (req, res) => {
   const { error } = validate(req.body); 
   if (error) return res.status(400).send(error.details[0].message);
-
-  let director = new Director({ name: req.body.name });
+  let path="";
+  if (req.file) 
+   path = req.file.path;
+  let director = new Director({ name: req.body.name, Image:path });
   director = await director.save();
   
   res.send(director);

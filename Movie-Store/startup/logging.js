@@ -17,12 +17,12 @@ module.exports = function() {
         })
     ]
 });
- winston.createLogger({
+ /*winston.createLogger({
     transports: [
         new winston.transports.MongoDB({
           db: 'mongodb://localhost/MovieStore',
             level: 'info'
         })
     ]
-});
+});*/
 }
