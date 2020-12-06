@@ -4,6 +4,25 @@ const {Director, validate} = require('../models/director');
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
+var multer  = require('multer')
+
+const storage = multer.diskStorage({
+  destination: './uploads/movieimages/',
+  filename(req, file, cb) {
+    var currentdate = new Date(); 
+    var datetime =currentdate.getFullYear().toString()  +  (parseInt(currentdate.getMonth())    + 1).toString() 
+       +   currentdate.getDate().toString() + 
+      + currentdate.getHours().toString()  
+      + currentdate.getMinutes().toString()  +  currentdate.getSeconds().toString() ; 
+    cb(null, `${datetime}-${file.originalname}`);
+   }
+  
+});
+
+const upload = multer({ storage });
+
+
+
 router.use(
   express.urlencoded({
     extended: true
