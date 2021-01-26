@@ -1,4 +1,3 @@
 # movie-store
-node.js and react.js web application
-and test it
-gdssgs
+node.js and react.js web application demo
+
