@@ -7,7 +7,7 @@ var logger = require('./logging.js');
 //} 
 
 module.exports = function() {
-  mongoose.connect('mongodb+srv://mongoUser:123@mongodb.o354l.mongodb.net/MongoDb?retryWrites=true&w=majority',
+  mongoose.connect('mongodb+srv://UserName:password@mongodb.o354l.mongodb.net/MongoDb?retryWrites=true&w=majority',
   {useNewUrlParser: true, useUnifiedTopology:true,useCreateIndex:true,
   useFindAndModify:false})
     .then(() => winston.info('Connected to  MongoDB...'));
