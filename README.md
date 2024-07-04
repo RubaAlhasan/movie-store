@@ -1,3 +1,3 @@
 # movie-store
-node.js and react.js web application demo
+node.js web application API
 
